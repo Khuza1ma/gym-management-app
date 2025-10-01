@@ -1,0 +1,120 @@
+# ===============================
+# Flutter / Dart
+# ===============================
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+build/
+coverage/
+flutter_export_environment.sh
+
+# Dependency lock files (generated, not needed in repo)
+pubspec.lock
+
+# ===============================
+# Android
+# ===============================
+android/.gradle/
+android/.idea/
+android/local.properties
+android/captures/
+android/gradlew
+android/gradlew.bat
+android/app/*.keystore
+android/app/*.jks
+android/key.properties
+*.iml
+*.hprof
+
+# Firebase/Google configs
+android/app/google-services.json
+
+# ===============================
+# iOS
+# ===============================
+ios/.generated/
+ios/Flutter/ephemeral/
+ios/Flutter/Generated.xcconfig
+ios/Flutter/Flutter.podspec
+ios/Flutter/Flutter.framework
+ios/Pods/
+ios/Podfile.lock
+ios/Runner/GeneratedPluginRegistrant.*
+ios/Runner/GoogleService-Info.plist
+
+# Xcode user data
+*.xcworkspace
+*.xcuserstate
+*.xcuserdatad
+*.moved-aside
+.DerivedData/
+
+# ===============================
+# macOS
+# ===============================
+macos/Flutter/ephemeral/
+macos/Pods/
+macos/Podfile.lock
+*.xcworkspace
+*.xcuserstate
+*.xcuserdatad
+.DerivedData/
+
+# ===============================
+# Windows
+# ===============================
+windows/flutter/ephemeral/
+*.pdb
+*.obj
+*.dll
+*.exe
+*.ilk
+*.idb
+*.lib
+
+# ===============================
+# Linux
+# ===============================
+linux/flutter/ephemeral/
+*.o
+*.so
+
+# ===============================
+# Firebase & Secrets
+# ===============================
+*.plist
+*.json
+*.p12
+*.pem
+*.crt
+*.key
+*.keystore
+*.jks
+.env
+*.env.*
+
+# ===============================
+# IDEs / Editors
+# ===============================
+.vscode/
+.idea/
+*.iml
+
+# ===============================
+# OS / System files
+# ===============================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+desktop.ini
+
+# ===============================
+# Logs / Temp
+# ===============================
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
