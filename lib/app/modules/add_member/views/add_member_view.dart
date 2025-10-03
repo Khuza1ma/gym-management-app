@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -38,21 +39,21 @@ class AddMemberView extends GetView<AddMemberController> {
               _buildTextField(
                 controller: controller.memberNameController,
                 label: 'First Name',
-                icon: Icons.person_outline,
+                icon: FontAwesomeIcons.user,
                 validator: Validators.validateName,
               ),
               const SizedBox(height: 20),
               _buildTextField(
                 controller: controller.memberLastnameController,
                 label: 'Last Name',
-                icon: Icons.person_outline,
+                icon: FontAwesomeIcons.user,
                 validator: Validators.validateName,
               ),
               const SizedBox(height: 20),
               _buildTextField(
                 controller: controller.cardNumberController,
                 label: 'Card Number',
-                icon: Icons.credit_card,
+                icon: FontAwesomeIcons.idCard,
                 keyboardType: TextInputType.number,
                 validator: Validators.validateCardNumber,
               ),
@@ -61,21 +62,21 @@ class AddMemberView extends GetView<AddMemberController> {
                 controller: controller.phoneNumberController,
                 label: 'Phone Number',
                 isPhoneNumber: true,
-                icon: Icons.phone,
+                icon: FontAwesomeIcons.phone,
                 keyboardType: TextInputType.phone,
                 validator: Validators.validatePhoneNumber,
               ),
               const SizedBox(height: 20),
               _buildDateField(
                 label: 'Plan Start Date',
-                icon: Icons.calendar_today,
+                icon: FontAwesomeIcons.calendar,
                 dateObservable: controller.planStartDate,
                 onTap: () => controller.selectPlanStartDate(context),
               ),
               const SizedBox(height: 20),
               _buildDateField(
                 label: 'Plan End Date',
-                icon: Icons.event,
+                icon: FontAwesomeIcons.calendarDays,
                 dateObservable: controller.planEndDate,
                 onTap: () => controller.selectPlanEndDate(context),
               ),
@@ -119,7 +120,7 @@ class AddMemberView extends GetView<AddMemberController> {
           prefixText: isPhoneNumber ? '+91 ' : null,
           labelText: label,
           labelStyle: const TextStyle(color: AppColors.textSecondary),
-          prefixIcon: Icon(icon, color: AppColors.primary),
+          prefixIcon: Icon(icon, color: AppColors.primary, size: 20),
           border: outlineInputBorder(),
           disabledBorder: outlineInputBorder(),
           enabledBorder: outlineInputBorder(),
@@ -168,7 +169,7 @@ class AddMemberView extends GetView<AddMemberController> {
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
             child: Row(
               children: [
-                Icon(icon, color: AppColors.primary),
+                Icon(icon, color: AppColors.primary, size: 20),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
@@ -196,8 +197,8 @@ class AddMemberView extends GetView<AddMemberController> {
                     ],
                   ),
                 ),
-                const Icon(
-                  Icons.arrow_drop_down,
+                const FaIcon(
+                  FontAwesomeIcons.angleDown,
                   color: AppColors.textSecondary,
                 ),
               ],

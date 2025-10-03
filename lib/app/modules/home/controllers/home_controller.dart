@@ -1,8 +1,8 @@
+import 'package:gym_management_app/app/data/models/member_model.dart';
+import '../../../data/services/member_service.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:gym_management_app/app/data/models/member_model.dart';
-
-import '../../../data/services/member_service.dart';
 
 class HomeController extends GetxController
     with GetSingleTickerProviderStateMixin {

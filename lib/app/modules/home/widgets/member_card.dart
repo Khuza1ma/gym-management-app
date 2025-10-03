@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:gym_management_app/app/data/models/member_model.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
-
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../core/theme/app_colors.dart';
 
 class MemberCard extends StatelessWidget {
@@ -30,9 +32,6 @@ class MemberCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(16),
-          border: isExpiring && isActive
-              ? Border.all(color: Colors.orange, width: 2)
-              : null,
           boxShadow: [
             BoxShadow(
               color: AppColors.shadow,
@@ -47,6 +46,7 @@ class MemberCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     padding: const EdgeInsets.all(12),
@@ -55,7 +55,7 @@ class MemberCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Icon(
-                      Icons.person,
+                      FontAwesomeIcons.user,
                       color: AppColors.primary,
                       size: 24,
                     ),
@@ -77,7 +77,7 @@ class MemberCard extends StatelessWidget {
                         Row(
                           children: [
                             Icon(
-                              Icons.credit_card,
+                              FontAwesomeIcons.creditCard,
                               size: 14,
                               color: AppColors.textSecondary,
                             ),
@@ -95,7 +95,7 @@ class MemberCard extends StatelessWidget {
                         Row(
                           children: [
                             Icon(
-                              Icons.phone,
+                              FontAwesomeIcons.phone,
                               size: 14,
                               color: AppColors.textSecondary,
                             ),
@@ -123,20 +123,9 @@ class MemberCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    _buildPlanRow(
-                      'Plan Start',
-                      DateFormat('MMM dd, yyyy').format(member.planStartDate),
-                      Icons.play_circle_outline,
-                    ),
-                    const SizedBox(height: 8),
-                    _buildPlanRow(
-                      'Plan End',
-                      DateFormat('MMM dd, yyyy').format(member.planEndDate),
-                      Icons.event_available,
-                    ),
                     if (isActive && daysUntilExpiry <= 7) ...[
-                      const SizedBox(height: 8),
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 8,
@@ -146,27 +135,130 @@ class MemberCard extends StatelessWidget {
                           color: Colors.orange.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(6),
                         ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.warning_amber_rounded,
-                              size: 14,
-                              color: Colors.orange,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              '$daysUntilExpiry day${daysUntilExpiry == 1 ? '' : 's'} remaining',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.orange.shade700,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
+                        child: Text(
+                          '$daysUntilExpiry day${daysUntilExpiry == 1 ? '' : 's'} remaining',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.orange.shade700,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                     ],
+                    if (!isActive) ...[
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.red.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          'Expired ${-daysUntilExpiry} day${-daysUntilExpiry == 1 ? '' : 's'} ago',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.red.shade700,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                    const SizedBox(height: 12),
+                    _buildPlanRow(
+                      'Plan Start',
+                      DateFormat('MMM dd, yyyy').format(member.planStartDate),
+                      FontAwesomeIcons.calendarCheck,
+                    ),
+                    const SizedBox(height: 8),
+                    _buildPlanRow(
+                      'Plan End',
+                      DateFormat('MMM dd, yyyy').format(member.planEndDate),
+                      FontAwesomeIcons.calendarDay,
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            onPressed: () async {
+                              final sanitized = member.phoneNumber.replaceAll(
+                                RegExp(r'[^0-9+]'),
+                                '',
+                              );
+                              final uri = Uri.parse(
+                                'https://wa.me/+91$sanitized',
+                              );
+                              final ok = await launchUrl(
+                                uri,
+                                mode: LaunchMode.externalApplication,
+                              );
+                              if (!ok) {
+                                Get.snackbar(
+                                  'Error',
+                                  'Could not open WhatsApp',
+                                  snackPosition: SnackPosition.BOTTOM,
+                                  backgroundColor: Colors.red.shade100,
+                                  colorText: Colors.red.shade900,
+                                );
+                              }
+                            },
+                            icon: const Icon(
+                              FontAwesomeIcons.whatsapp,
+                              color: AppColors.primary,
+                            ),
+                            label: Text(
+                              'WhatsApp',
+                              style: TextStyle(
+                                color: AppColors.primary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: AppColors.textPrimary,
+                              side: const BorderSide(
+                                color: AppColors.divider,
+                                width: 2,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: FilledButton.icon(
+                            onPressed: () async {
+                              final uri = Uri(
+                                scheme: 'tel',
+                                path: member.phoneNumber,
+                              );
+                              final ok = await launchUrl(uri);
+                              if (!ok && context.mounted) {
+                                Get.snackbar(
+                                  'Error',
+                                  'Could not launch dialer',
+                                  snackPosition: SnackPosition.BOTTOM,
+                                  backgroundColor: Colors.red.shade100,
+                                  colorText: Colors.red.shade900,
+                                );
+                              }
+                            },
+                            style: FilledButton.styleFrom(
+                              backgroundColor: AppColors.primary,
+                              foregroundColor: AppColors.surface,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            icon: const Icon(FontAwesomeIcons.phone),
+                            label: const Text('Call'),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -185,15 +277,15 @@ class MemberCard extends StatelessWidget {
     if (!isActive) {
       chipColor = Colors.red;
       chipText = 'Expired';
-      chipIcon = Icons.close;
+      chipIcon = FontAwesomeIcons.hourglassEnd;
     } else if (daysUntilExpiry <= 7) {
       chipColor = Colors.orange;
       chipText = 'Expiring';
-      chipIcon = Icons.warning;
+      chipIcon = FontAwesomeIcons.triangleExclamation;
     } else {
       chipColor = Colors.green;
       chipText = 'Active';
-      chipIcon = Icons.check;
+      chipIcon = FontAwesomeIcons.check;
     }
 
     return Container(
