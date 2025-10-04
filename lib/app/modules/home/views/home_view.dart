@@ -104,7 +104,7 @@ class HomeView extends GetView<HomeController> {
           backgroundColor: AppColors.primary,
           foregroundColor: AppColors.surface,
           elevation: 0,
-          icon: const Icon(Icons.person_add_rounded, size: 24),
+          icon: const FaIcon(FontAwesomeIcons.userPlus, size: 24),
           label: const Text(
             'Add Member',
             style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
@@ -124,7 +124,7 @@ class HomeView extends GetView<HomeController> {
 
       if (controller.allMembers.isEmpty) {
         return _buildEmptyState(
-          icon: Icons.people_outline,
+          icon: FontAwesomeIcons.userGroup,
           title: 'No Members Yet',
           subtitle: 'Add your first gym member to get started',
         );
@@ -155,7 +155,7 @@ class HomeView extends GetView<HomeController> {
 
       if (controller.expiringMembers.isEmpty) {
         return _buildEmptyState(
-          icon: Icons.schedule,
+          icon: FontAwesomeIcons.clock,
           title: 'No Expiring Members',
           subtitle: 'All members have valid memberships',
           color: Colors.green,
@@ -191,7 +191,7 @@ class HomeView extends GetView<HomeController> {
 
       if (controller.expiredMembers.isEmpty) {
         return _buildEmptyState(
-          icon: Icons.check_circle_outline,
+          icon: FontAwesomeIcons.circleCheck,
           title: 'No Expired Members',
           subtitle: 'All members have active or upcoming plans',
           color: Colors.green,

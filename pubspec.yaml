@@ -39,6 +39,7 @@ dependencies:
   url_launcher: ^6.3.2
   font_awesome_flutter: ^10.10.0
   firebase_auth: ^6.1.0
+  shared_preferences: ^2.5.3
   get: ^4.7.2
   intl: ^0.20.2
 

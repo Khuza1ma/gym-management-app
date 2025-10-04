@@ -23,6 +23,29 @@ class AuthService {
     }
   }
 
+  Future<UserCredential> signUpWithEmailPassword({
+    required String email,
+    required String password,
+    String? displayName,
+  }) async {
+    try {
+      final userCredential = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      
+      // Update display name if provided
+      if (displayName != null && displayName.isNotEmpty) {
+        await userCredential.user?.updateDisplayName(displayName);
+        await userCredential.user?.reload();
+      }
+      
+      return userCredential;
+    } on FirebaseAuthException catch (e) {
+      throw Exception(_mapFirebaseAuthError(e));
+    }
+  }
+
   Future<void> sendPasswordReset({required String email}) async {
     try {
       await _auth.sendPasswordResetEmail(email: email);

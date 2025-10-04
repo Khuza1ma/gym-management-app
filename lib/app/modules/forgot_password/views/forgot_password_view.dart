@@ -14,17 +14,21 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
       appBar: AppBar(
         title: const Text(
           'Reset Password',
-          style: TextStyle(color: AppColors.surface, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: AppColors.surface,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         backgroundColor: AppColors.primary,
         elevation: 0,
         iconTheme: const IconThemeData(color: AppColors.surface),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _buildHeader(),
               const SizedBox(height: 24),
@@ -39,11 +43,19 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
   Widget _buildHeader() {
     return Column(
       children: const [
-        Icon(FontAwesomeIcons.envelopeOpenText, size: 44, color: AppColors.primary),
+        Icon(
+          FontAwesomeIcons.envelopeOpenText,
+          size: 44,
+          color: AppColors.primary,
+        ),
         SizedBox(height: 12),
         Text(
           'Forgot your password?',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: AppColors.textPrimary,
+          ),
           textAlign: TextAlign.center,
         ),
         SizedBox(height: 6),
@@ -82,15 +94,25 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
               decoration: InputDecoration(
                 labelText: 'Email',
                 labelStyle: const TextStyle(color: AppColors.textSecondary),
-                prefixIcon: const Icon(FontAwesomeIcons.envelope, size: 18, color: AppColors.primary),
+                prefixIcon: const Icon(
+                  FontAwesomeIcons.envelope,
+                  size: 18,
+                  color: AppColors.primary,
+                ),
                 filled: true,
                 fillColor: AppColors.surface,
                 border: _border(),
                 enabledBorder: _border(),
                 focusedBorder: _focusedBorder(),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 16,
+                ),
               ),
-              style: const TextStyle(color: AppColors.textPrimary, fontSize: 16),
+              style: const TextStyle(
+                color: AppColors.textPrimary,
+                fontSize: 16,
+              ),
             ),
             const SizedBox(height: 20),
             Obx(() => _buildSendButton()),
@@ -125,7 +147,11 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
       child: controller.isLoading.value
-          ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
+          ? const SizedBox(
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            )
           : const Text(
               'Send reset link',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
