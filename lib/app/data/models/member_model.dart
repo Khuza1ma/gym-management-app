@@ -4,7 +4,7 @@ class Member {
   final String id;
   final String memberName;
   final String memberLastname;
-  final String cardNumber;
+  final int cardNumber;
   final String phoneNumber;
   final DateTime planStartDate;
   final DateTime planEndDate;
@@ -29,7 +29,7 @@ class Member {
       id: doc.id,
       memberName: data['memberName'] ?? '',
       memberLastname: data['memberLastname'] ?? '',
-      cardNumber: data['cardNumber'] ?? '',
+      cardNumber: data['cardNumber'] ?? 0,
       phoneNumber: data['phoneNumber'] ?? '',
       planStartDate: (data['planStartDate'] as Timestamp).toDate(),
       planEndDate: (data['planEndDate'] as Timestamp).toDate(),
@@ -55,7 +55,7 @@ class Member {
     String? id,
     String? memberName,
     String? memberLastname,
-    String? cardNumber,
+    int? cardNumber,
     String? phoneNumber,
     DateTime? planStartDate,
     DateTime? planEndDate,

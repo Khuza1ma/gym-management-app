@@ -42,7 +42,7 @@ class AddMemberController extends GetxController {
     if (memberToEdit != null) {
       memberNameController.text = memberToEdit!.memberName;
       memberLastnameController.text = memberToEdit!.memberLastname;
-      cardNumberController.text = memberToEdit!.cardNumber;
+      cardNumberController.text = memberToEdit!.cardNumber.toString();
       phoneNumberController.text = memberToEdit!.phoneNumber;
       planStartDate.value = memberToEdit!.planStartDate;
       planEndDate.value = memberToEdit!.planEndDate;
@@ -107,7 +107,7 @@ class AddMemberController extends GetxController {
         final updatedMember = memberToEdit!.copyWith(
           memberName: memberNameController.text.trim(),
           memberLastname: memberLastnameController.text.trim(),
-          cardNumber: cardNumberController.text.trim(),
+          cardNumber: int.tryParse(cardNumberController.text.trim()),
           phoneNumber: phoneNumberController.text.trim(),
           planStartDate: planStartDate.value!,
           planEndDate: planEndDate.value!,
@@ -130,7 +130,7 @@ class AddMemberController extends GetxController {
         final memberId = await _memberService.addMember(
           memberName: memberNameController.text.trim(),
           memberLastname: memberLastnameController.text.trim(),
-          cardNumber: cardNumberController.text.trim(),
+          cardNumber: int.tryParse(cardNumberController.text.trim()) ?? 0,
           phoneNumber: phoneNumberController.text.trim(),
           planStartDate: planStartDate.value!,
           planEndDate: planEndDate.value!,
@@ -140,7 +140,7 @@ class AddMemberController extends GetxController {
           id: memberId,
           memberName: memberNameController.text.trim(),
           memberLastname: memberLastnameController.text.trim(),
-          cardNumber: cardNumberController.text.trim(),
+          cardNumber: int.tryParse(cardNumberController.text.trim()) ?? 0,
           phoneNumber: phoneNumberController.text.trim(),
           planStartDate: planStartDate.value!,
           planEndDate: planEndDate.value!,

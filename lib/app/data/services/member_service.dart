@@ -8,7 +8,7 @@ class MemberService {
   Future<String> addMember({
     required String memberName,
     required String memberLastname,
-    required String cardNumber,
+    required int cardNumber,
     required String phoneNumber,
     required DateTime planStartDate,
     required DateTime planEndDate,
@@ -35,7 +35,7 @@ class MemberService {
     try {
       final querySnapshot = await _firestore
           .collection(_collection)
-          .orderBy('createdAt', descending: true)
+          .orderBy('cardNumber', descending: false)
           .get();
 
       return querySnapshot.docs
@@ -108,13 +108,13 @@ class MemberService {
   Future<List<Member>> getExpiredMembers() async {
     try {
       final now = DateTime.now();
-      
+
       final querySnapshot = await _firestore
           .collection(_collection)
           .where('planEndDate', isLessThan: Timestamp.fromDate(now))
           .orderBy('planEndDate', descending: true)
           .get();
-      
+
       return querySnapshot.docs
           .map((doc) => Member.fromFirestore(doc))
           .toList();

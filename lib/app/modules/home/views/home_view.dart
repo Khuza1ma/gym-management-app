@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:gym_management_app/app/data/models/member_model.dart';
 
@@ -22,7 +23,6 @@ class HomeView extends GetView<HomeController> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        centerTitle: true,
         backgroundColor: AppColors.primary,
         elevation: 0,
         bottom: TabBar(
@@ -40,14 +40,40 @@ class HomeView extends GetView<HomeController> {
             fontSize: 14,
           ),
           tabs: const [
-            Tab(icon: Icon(Icons.people, size: 20), text: 'All Members'),
             Tab(
-              icon: Icon(Icons.warning_amber_rounded, size: 20),
+              icon: Icon(FontAwesomeIcons.userGroup, size: 20),
+              text: 'All Members',
+            ),
+            Tab(
+              icon: Icon(FontAwesomeIcons.triangleExclamation, size: 20),
               text: 'Expiring Soon',
             ),
-            Tab(icon: Icon(Icons.cancel, size: 20), text: 'Expired'),
+            Tab(
+              icon: Icon(FontAwesomeIcons.hourglassEnd, size: 20),
+              text: 'Expired',
+            ),
           ],
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: IconButton.outlined(
+              icon: const Icon(
+                FontAwesomeIcons.user,
+                color: AppColors.surface,
+                size: 20,
+              ),
+              onPressed: () => Get.toNamed(Routes.PROFILE),
+              style: IconButton.styleFrom(
+                side: const BorderSide(color: AppColors.surface),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              tooltip: 'Profile',
+            ),
+          ),
+        ],
       ),
       body: TabBarView(
         controller: controller.tabController,
@@ -78,7 +104,7 @@ class HomeView extends GetView<HomeController> {
           backgroundColor: AppColors.primary,
           foregroundColor: AppColors.surface,
           elevation: 0,
-          icon: const Icon(Icons.person_add_rounded, size: 24),
+          icon: const FaIcon(FontAwesomeIcons.userPlus, size: 24),
           label: const Text(
             'Add Member',
             style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
@@ -98,7 +124,7 @@ class HomeView extends GetView<HomeController> {
 
       if (controller.allMembers.isEmpty) {
         return _buildEmptyState(
-          icon: Icons.people_outline,
+          icon: FontAwesomeIcons.userGroup,
           title: 'No Members Yet',
           subtitle: 'Add your first gym member to get started',
         );
@@ -129,7 +155,7 @@ class HomeView extends GetView<HomeController> {
 
       if (controller.expiringMembers.isEmpty) {
         return _buildEmptyState(
-          icon: Icons.schedule,
+          icon: FontAwesomeIcons.clock,
           title: 'No Expiring Members',
           subtitle: 'All members have valid memberships',
           color: Colors.green,
@@ -165,7 +191,7 @@ class HomeView extends GetView<HomeController> {
 
       if (controller.expiredMembers.isEmpty) {
         return _buildEmptyState(
-          icon: Icons.check_circle_outline,
+          icon: FontAwesomeIcons.circleCheck,
           title: 'No Expired Members',
           subtitle: 'All members have active or upcoming plans',
           color: Colors.green,
