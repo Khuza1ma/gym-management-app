@@ -116,31 +116,37 @@ class HomeView extends GetView<HomeController> {
 
   Widget _buildAllMembersTab() {
     return Obx(() {
-      if (controller.isLoadingAllMembers.value) {
-        return const Center(
-          child: CircularProgressIndicator(color: AppColors.primary),
-        );
-      }
-
-      if (controller.allMembers.isEmpty) {
-        return _buildEmptyState(
-          icon: FontAwesomeIcons.userGroup,
-          title: 'No Members Yet',
-          subtitle: 'Add your first gym member to get started',
-        );
-      }
-
-      return RefreshIndicator(
-        onRefresh: controller.refreshData,
-        color: AppColors.primary,
-        child: ListView.builder(
-          padding: const EdgeInsets.all(16),
-          itemCount: controller.allMembers.length,
-          itemBuilder: (context, index) {
-            final member = controller.allMembers[index];
-            return MemberCard(member: member, onTap: () => _editMember(member));
-          },
-        ),
+      return Column(
+        children: [
+          _buildSearchBar(),
+          Expanded(
+            child: controller.isLoadingAllMembers.value
+                ? const Center(
+                    child: CircularProgressIndicator(color: AppColors.primary),
+                  )
+                : controller.allMembers.isEmpty
+                ? _buildEmptyState(
+                    icon: FontAwesomeIcons.userGroup,
+                    title: 'No Members Yet',
+                    subtitle: 'Add your first gym member to get started',
+                  )
+                : RefreshIndicator(
+                    onRefresh: controller.refreshData,
+                    color: AppColors.primary,
+                    child: ListView.builder(
+                      padding: const EdgeInsets.all(16),
+                      itemCount: controller.allMembers.length,
+                      itemBuilder: (context, index) {
+                        final member = controller.allMembers[index];
+                        return MemberCard(
+                          member: member,
+                          onTap: () => _editMember(member),
+                        );
+                      },
+                    ),
+                  ),
+          ),
+        ],
       );
     });
   }
@@ -267,5 +273,56 @@ class HomeView extends GetView<HomeController> {
     if (result is Member) {
       controller.updateMemberLocally(result);
     }
+  }
+
+  Widget _buildSearchBar() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+      child: TextField(
+        controller: controller.searchController,
+        onChanged: controller.setSearchQuery,
+        textInputAction: TextInputAction.search,
+        decoration: InputDecoration(
+          hintText: 'Search by name or last name',
+          hintStyle: const TextStyle(
+            color: AppColors.textSecondary,
+            fontSize: 14,
+          ),
+          prefixIcon: const Icon(
+            FontAwesomeIcons.magnifyingGlass,
+            size: 18,
+            color: AppColors.textSecondary,
+          ),
+          suffixIcon: Obx(() {
+            final hasQuery = controller.searchQuery.value.trim().isNotEmpty;
+            if (!hasQuery) return const SizedBox.shrink();
+            return IconButton(
+              tooltip: 'Clear',
+              icon: const Icon(
+                FontAwesomeIcons.xmark,
+                size: 18,
+                color: AppColors.textSecondary,
+              ),
+              onPressed: controller.clearSearch,
+            );
+          }),
+          filled: true,
+          fillColor: AppColors.surface.withValues(alpha: 0.06),
+          border: _outlineInputBorder(),
+          enabledBorder: _outlineInputBorder(),
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: 12,
+            horizontal: 12,
+          ),
+        ),
+      ),
+    );
+  }
+
+  OutlineInputBorder _outlineInputBorder() {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide(color: AppColors.primary),
+    );
   }
 }

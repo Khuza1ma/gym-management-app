@@ -6,6 +6,7 @@ class Member {
   final String memberLastname;
   final int cardNumber;
   final String phoneNumber;
+  final String address;
   final DateTime planStartDate;
   final DateTime planEndDate;
   final DateTime createdAt;
@@ -17,6 +18,7 @@ class Member {
     required this.memberLastname,
     required this.cardNumber,
     required this.phoneNumber,
+    required this.address,
     required this.planStartDate,
     required this.planEndDate,
     required this.createdAt,
@@ -31,6 +33,7 @@ class Member {
       memberLastname: data['memberLastname'] ?? '',
       cardNumber: data['cardNumber'] ?? 0,
       phoneNumber: data['phoneNumber'] ?? '',
+      address: data['address'] ?? '',
       planStartDate: (data['planStartDate'] as Timestamp).toDate(),
       planEndDate: (data['planEndDate'] as Timestamp).toDate(),
       createdAt: (data['createdAt'] as Timestamp).toDate(),
@@ -44,6 +47,7 @@ class Member {
       'memberLastname': memberLastname,
       'cardNumber': cardNumber,
       'phoneNumber': phoneNumber,
+      'address': address,
       'planStartDate': Timestamp.fromDate(planStartDate),
       'planEndDate': Timestamp.fromDate(planEndDate),
       'createdAt': Timestamp.fromDate(createdAt),
@@ -57,6 +61,7 @@ class Member {
     String? memberLastname,
     int? cardNumber,
     String? phoneNumber,
+    String? address,
     DateTime? planStartDate,
     DateTime? planEndDate,
     DateTime? createdAt,
@@ -68,6 +73,7 @@ class Member {
       memberLastname: memberLastname ?? this.memberLastname,
       cardNumber: cardNumber ?? this.cardNumber,
       phoneNumber: phoneNumber ?? this.phoneNumber,
+      address: address ?? this.address,
       planStartDate: planStartDate ?? this.planStartDate,
       planEndDate: planEndDate ?? this.planEndDate,
       createdAt: createdAt ?? this.createdAt,

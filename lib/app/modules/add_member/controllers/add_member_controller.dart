@@ -11,6 +11,7 @@ class AddMemberController extends GetxController {
   final memberLastnameController = TextEditingController();
   final cardNumberController = TextEditingController();
   final phoneNumberController = TextEditingController();
+  final addressController = TextEditingController();
 
   final isLoading = false.obs;
   final Rx<DateTime?> planStartDate = Rx<DateTime?>(null);
@@ -44,6 +45,7 @@ class AddMemberController extends GetxController {
       memberLastnameController.text = memberToEdit!.memberLastname;
       cardNumberController.text = memberToEdit!.cardNumber.toString();
       phoneNumberController.text = memberToEdit!.phoneNumber;
+      addressController.text = memberToEdit!.address;
       planStartDate.value = memberToEdit!.planStartDate;
       planEndDate.value = memberToEdit!.planEndDate;
     }
@@ -55,6 +57,7 @@ class AddMemberController extends GetxController {
     memberLastnameController.dispose();
     cardNumberController.dispose();
     phoneNumberController.dispose();
+    addressController.dispose();
     super.onClose();
   }
 
@@ -109,6 +112,7 @@ class AddMemberController extends GetxController {
           memberLastname: memberLastnameController.text.trim(),
           cardNumber: int.tryParse(cardNumberController.text.trim()),
           phoneNumber: phoneNumberController.text.trim(),
+          address: addressController.text.trim(),
           planStartDate: planStartDate.value!,
           planEndDate: planEndDate.value!,
           updatedAt: DateTime.now(),
@@ -132,6 +136,7 @@ class AddMemberController extends GetxController {
           memberLastname: memberLastnameController.text.trim(),
           cardNumber: int.tryParse(cardNumberController.text.trim()) ?? 0,
           phoneNumber: phoneNumberController.text.trim(),
+          address: addressController.text.trim(),
           planStartDate: planStartDate.value!,
           planEndDate: planEndDate.value!,
         );
@@ -142,6 +147,7 @@ class AddMemberController extends GetxController {
           memberLastname: memberLastnameController.text.trim(),
           cardNumber: int.tryParse(cardNumberController.text.trim()) ?? 0,
           phoneNumber: phoneNumberController.text.trim(),
+          address: addressController.text.trim(),
           planStartDate: planStartDate.value!,
           planEndDate: planEndDate.value!,
           createdAt: DateTime.now(),
@@ -169,6 +175,7 @@ class AddMemberController extends GetxController {
     memberLastnameController.clear();
     cardNumberController.clear();
     phoneNumberController.clear();
+    addressController.clear();
     planStartDate.value = DateTime.now();
     planEndDate.value = DateTime.now().add(const Duration(days: 30));
   }

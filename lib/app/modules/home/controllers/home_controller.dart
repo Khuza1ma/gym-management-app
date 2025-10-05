@@ -18,6 +18,8 @@ class HomeController extends GetxController
   final RxBool isLoadingExpiredMembers = false.obs;
 
   final RxInt currentTabIndex = 0.obs;
+  final RxString searchQuery = ''.obs;
+  final TextEditingController searchController = TextEditingController();
 
   @override
   void onInit() {
@@ -30,11 +32,18 @@ class HomeController extends GetxController
     loadAllMembers();
     loadExpiringMembers();
     loadExpiredMembers();
+
+    debounce<String>(
+      searchQuery,
+      (_) => _handleSearchDebounced(),
+      time: const Duration(milliseconds: 350),
+    );
   }
 
   @override
   void onClose() {
     tabController.dispose();
+    searchController.dispose();
     super.onClose();
   }
 
@@ -87,11 +96,14 @@ class HomeController extends GetxController
   }
 
   Future<void> refreshData() async {
-    await Future.wait([
-      loadAllMembers(),
-      loadExpiringMembers(),
-      loadExpiredMembers(),
-    ]);
+    final List<Future<void>> tasks = [];
+    if (currentTabIndex.value == 0 && searchQuery.value.trim().isNotEmpty) {
+      tasks.add(_performSearch());
+    } else {
+      tasks.add(loadAllMembers());
+    }
+    tasks.addAll([loadExpiringMembers(), loadExpiredMembers()]);
+    await Future.wait(tasks);
   }
 
   void onTabChanged(int index) {
@@ -150,6 +162,43 @@ class HomeController extends GetxController
       expiredMembers.insert(0, updatedMember);
     } else if (expiredIndex != -1 && isExpired) {
       expiredMembers[expiredIndex] = updatedMember;
+    }
+  }
+
+  void setSearchQuery(String value) {
+    searchQuery.value = value;
+  }
+
+  void clearSearch() {
+    searchController.clear();
+    if (searchQuery.value.isEmpty) return;
+    searchQuery.value = '';
+    loadAllMembers();
+  }
+
+  Future<void> _handleSearchDebounced() async {
+    if (currentTabIndex.value != 0) return;
+    await _performSearch();
+  }
+
+  Future<void> _performSearch() async {
+    final q = searchQuery.value.trim();
+    if (q.isEmpty) {
+      await loadAllMembers();
+      return;
+    }
+    try {
+      isLoadingAllMembers.value = true;
+      final results = await _memberService.searchMembers(query: q);
+      allMembers.assignAll(results);
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to search members: $e',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
+      isLoadingAllMembers.value = false;
     }
   }
 }

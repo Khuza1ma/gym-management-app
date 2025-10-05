@@ -10,6 +10,7 @@ class MemberService {
     required String memberLastname,
     required int cardNumber,
     required String phoneNumber,
+    required String address,
     required DateTime planStartDate,
     required DateTime planEndDate,
   }) async {
@@ -20,6 +21,7 @@ class MemberService {
         'memberLastname': memberLastname,
         'cardNumber': cardNumber,
         'phoneNumber': phoneNumber,
+        'address': address,
         'planStartDate': Timestamp.fromDate(planStartDate),
         'planEndDate': Timestamp.fromDate(planEndDate),
         'createdAt': Timestamp.fromDate(now),
@@ -65,6 +67,7 @@ class MemberService {
         'memberLastname': member.memberLastname,
         'cardNumber': member.cardNumber,
         'phoneNumber': member.phoneNumber,
+        'address': member.address,
         'planStartDate': Timestamp.fromDate(member.planStartDate),
         'planEndDate': Timestamp.fromDate(member.planEndDate),
         'updatedAt': Timestamp.fromDate(DateTime.now()),
@@ -120,6 +123,52 @@ class MemberService {
           .toList();
     } catch (e) {
       throw Exception('Failed to get expired members: $e');
+    }
+  }
+
+  Future<List<Member>> searchMembers({
+    required String query,
+    int? limit,
+    DocumentSnapshot? startAfter,
+  }) async {
+    try {
+      final trimmed = query.trim();
+      if (trimmed.isEmpty) return [];
+
+      Query nameQuery = _firestore
+          .collection(_collection)
+          .orderBy('memberName')
+          .startAt([trimmed])
+          .endAt(['$trimmed\uf8ff']);
+      if (limit != null) nameQuery = nameQuery.limit(limit);
+      if (startAfter != null) {
+        nameQuery = nameQuery.startAfterDocument(startAfter);
+      }
+
+      Query lastNameQuery = _firestore
+          .collection(_collection)
+          .orderBy('memberLastname')
+          .startAt([trimmed])
+          .endAt(['$trimmed\uf8ff']);
+      if (limit != null) lastNameQuery = lastNameQuery.limit(limit);
+      if (startAfter != null) {
+        lastNameQuery = lastNameQuery.startAfterDocument(startAfter);
+      }
+
+      final results = await Future.wait([nameQuery.get(), lastNameQuery.get()]);
+
+      final Map<String, Member> idToMember = {};
+      for (final snap in results) {
+        for (final doc in snap.docs) {
+          idToMember[doc.id] = Member.fromFirestore(doc);
+        }
+      }
+
+      final members = idToMember.values.toList();
+      members.sort((a, b) => a.cardNumber.compareTo(b.cardNumber));
+      return members;
+    } catch (e) {
+      throw Exception('Failed to search members: $e');
     }
   }
 }

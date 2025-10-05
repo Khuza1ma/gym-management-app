@@ -67,6 +67,14 @@ class AddMemberView extends GetView<AddMemberController> {
                 validator: Validators.validatePhoneNumber,
               ),
               const SizedBox(height: 20),
+              _buildTextField(
+                controller: controller.addressController,
+                label: 'Address',
+                icon: FontAwesomeIcons.locationDot,
+                validator: Validators.validateAddress,
+                keyboardType: TextInputType.streetAddress,
+              ),
+              const SizedBox(height: 20),
               _buildDateField(
                 label: 'Plan Start Date',
                 icon: FontAwesomeIcons.calendar,

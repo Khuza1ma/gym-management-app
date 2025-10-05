@@ -64,6 +64,16 @@ class Validators {
     return null;
   }
 
+  static String? validateAddress(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Address is required';
+    }
+    if (value.trim().length < 5) {
+      return 'Address must be at least 5 characters';
+    }
+    return null;
+  }
+
   static String? validateDateRange(DateTime? startDate, DateTime? endDate) {
     if (startDate == null || endDate == null) {
       return 'Please select both dates';
