@@ -24,12 +24,13 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
         iconTheme: const IconThemeData(color: AppColors.surface),
       ),
       body: SafeArea(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              SizedBox(height: Get.height * 0.2),
               _buildHeader(),
               const SizedBox(height: 24),
               _buildFormCard(),

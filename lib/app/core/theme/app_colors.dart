@@ -9,6 +9,7 @@ class AppColors {
   static const Color warning = Color(0xFFE17055);
   static const Color error = Color(0xFFD63031);
   static const Color background = Color(0xFFF8F9FA);
+  static const Color backgroundDark = Color(0xFFEDEDED);
   static const Color surface = Color(0xFFFFFFFF);
   static const Color cardBackground = Color(0xFFFFFFFF);
   static const Color textPrimary = Color(0xFF2D3436);

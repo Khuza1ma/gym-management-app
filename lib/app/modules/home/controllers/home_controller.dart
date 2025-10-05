@@ -165,6 +165,12 @@ class HomeController extends GetxController
     }
   }
 
+  void deleteMemberLocally(String memberId) {
+    allMembers.removeWhere((m) => m.id == memberId);
+    expiringMembers.removeWhere((m) => m.id == memberId);
+    expiredMembers.removeWhere((m) => m.id == memberId);
+  }
+
   void setSearchQuery(String value) {
     searchQuery.value = value;
   }

@@ -19,7 +19,7 @@ class LoginView extends GetView<LoginController> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 40),
+              SizedBox(height: Get.height * 0.2),
               _buildHeader(),
               const SizedBox(height: 32),
               _buildFormCard(context),

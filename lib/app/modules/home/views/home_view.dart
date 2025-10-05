@@ -14,16 +14,11 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text(
           'Gym Management',
-          style: TextStyle(
-            color: AppColors.surface,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: AppColors.primary,
         elevation: 0,
         bottom: TabBar(
           controller: controller.tabController,

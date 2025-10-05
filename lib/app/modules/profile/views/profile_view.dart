@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/profile_controller.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../routes/app_pages.dart';
+import '../../../controller/theme_controller.dart';
 
 class ProfileView extends GetView<ProfileController> {
   const ProfileView({super.key});
@@ -35,6 +37,8 @@ class ProfileView extends GetView<ProfileController> {
             children: [
               const SizedBox(height: 20),
               _buildUserInfoCard(),
+              const SizedBox(height: 20),
+              _buildNavButtons(context),
               const SizedBox(height: 20),
               _buildTextField(
                 controller: controller.displayNameController,
@@ -121,6 +125,114 @@ class ProfileView extends GetView<ProfileController> {
         ],
       ),
     );
+  }
+
+  Widget _buildNavButtons(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: _buildOutlinedButton(
+            onPressed: () => Get.toNamed(Routes.CHANGE_PASSWORD),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Icon(Icons.lock_outline, color: AppColors.primary),
+                SizedBox(width: 8),
+                Text(
+                  'Change Password',
+                  style: TextStyle(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(width: 12),
+        _buildOutlinedButton(
+          onPressed: () =>
+              _showThemeMenu(context, Offset(Get.width - 100, 100)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Icon(Icons.color_lens_outlined, color: AppColors.primary),
+              SizedBox(width: 8),
+              Text(
+                'Theme',
+                style: TextStyle(
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Future<void> _showThemeMenu(BuildContext context, Offset offset) async {
+    final tc = ThemeController.to;
+    ThemeMode selected = tc.themeMode.value;
+
+    final result = await showMenu<ThemeMode>(
+      context: context,
+      position: RelativeRect.fill,
+      items: [
+        PopupMenuItem(
+          value: ThemeMode.system,
+          child: Row(
+            children: [
+              Icon(
+                Icons.settings,
+                color: selected == ThemeMode.system
+                    ? AppColors.primary
+                    : AppColors.textSecondary,
+              ),
+              const SizedBox(width: 8),
+              const Text('System'),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: ThemeMode.light,
+          child: Row(
+            children: [
+              Icon(
+                Icons.light_mode,
+                color: selected == ThemeMode.light
+                    ? AppColors.primary
+                    : AppColors.textSecondary,
+              ),
+              const SizedBox(width: 8),
+              const Text('Light'),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: ThemeMode.dark,
+          child: Row(
+            children: [
+              Icon(
+                Icons.dark_mode,
+                color: selected == ThemeMode.dark
+                    ? AppColors.primary
+                    : AppColors.textSecondary,
+              ),
+              const SizedBox(width: 8),
+              const Text('Dark'),
+            ],
+          ),
+        ),
+      ],
+      elevation: 8,
+      color: AppColors.surface,
+    );
+
+    if (result != null && result != selected) {
+      tc.setThemeMode(result);
+    }
   }
 
   Widget _buildTextField({

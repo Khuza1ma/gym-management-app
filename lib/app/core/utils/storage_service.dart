@@ -14,23 +14,6 @@ class StorageService {
     return _instance!;
   }
 
-
-  Future<bool> setThemeMode(String themeMode) async {
-    return await _prefsHelper!.setThemeMode(themeMode);
-  }
-
-  String getThemeMode() {
-    return _prefsHelper!.getThemeMode();
-  }
-
-  Future<bool> setIsDarkMode(bool isDark) async {
-    return await _prefsHelper!.setIsDarkMode(isDark);
-  }
-
-  bool isDarkMode() {
-    return _prefsHelper!.isDarkMode();
-  }
-
   Future<bool> clearAll() async {
     return await _prefsHelper!.clearAll();
   }

@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:gym_management_app/app/core/constants/storage_keys.dart';
 
 class SharedPreferencesHelper {
   static SharedPreferencesHelper? _instance;
@@ -70,22 +69,7 @@ class SharedPreferencesHelper {
     return null;
   }
 
-
-  Future<bool> setThemeMode(String themeMode) async {
-    return await setString(StorageKeys.themeMode, themeMode);
-  }
-
-  String getThemeMode() {
-    return getString(StorageKeys.themeMode) ?? 'system';
-  }
-
-  Future<bool> setIsDarkMode(bool isDark) async {
-    return await setBool(StorageKeys.isDarkMode, isDark);
-  }
-
-  bool isDarkMode() {
-    return getBool(StorageKeys.isDarkMode) ?? false;
-  }
+  // Deprecated theme-specific APIs removed; use StorageService instead
 
   Future<bool> clearAll() async {
     try {
