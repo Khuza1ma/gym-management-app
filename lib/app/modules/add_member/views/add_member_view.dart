@@ -13,18 +13,13 @@ class AddMemberView extends GetView<AddMemberController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Obx(
           () => Text(
             controller.isEditing.value ? 'Edit Member' : 'Add New Member',
-            style: const TextStyle(
-              color: AppColors.surface,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
-        backgroundColor: AppColors.primary,
         elevation: 0,
         iconTheme: const IconThemeData(color: AppColors.surface),
       ),
@@ -109,7 +104,7 @@ class AddMemberView extends GetView<AddMemberController> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: Theme.of(Get.context!).cardColor,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -123,7 +118,6 @@ class AddMemberView extends GetView<AddMemberController> {
         controller: controller,
         keyboardType: keyboardType,
         validator: validator,
-        style: const TextStyle(color: AppColors.textPrimary, fontSize: 16),
         decoration: InputDecoration(
           prefixText: isPhoneNumber ? '+91 ' : null,
           labelText: label,
@@ -133,7 +127,7 @@ class AddMemberView extends GetView<AddMemberController> {
           disabledBorder: outlineInputBorder(),
           enabledBorder: outlineInputBorder(),
           filled: true,
-          fillColor: AppColors.surface,
+          fillColor: Theme.of(Get.context!).cardColor,
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 16,
             vertical: 16,
@@ -158,7 +152,7 @@ class AddMemberView extends GetView<AddMemberController> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: Theme.of(Get.context!).cardColor,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -197,10 +191,7 @@ class AddMemberView extends GetView<AddMemberController> {
                                 'MMM dd, yyyy',
                               ).format(dateObservable.value!)
                             : 'Select date',
-                        style: const TextStyle(
-                          color: AppColors.textPrimary,
-                          fontSize: 16,
-                        ),
+                        style: const TextStyle(fontSize: 16),
                       ),
                     ],
                   ),

@@ -11,19 +11,7 @@ class ProfileView extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: const Text(
-          'Profile',
-          style: TextStyle(
-            color: AppColors.surface,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        backgroundColor: AppColors.primary,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.surface),
-      ),
+      appBar: AppBar(title: const Text('Profile'), elevation: 0),
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(
@@ -101,15 +89,11 @@ class ProfileView extends GetView<ProfileController> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Confirm Logout'),
-        backgroundColor: AppColors.background,
         content: const Text('Are you sure you want to logout?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text(
-              'Cancel',
-              style: TextStyle(color: AppColors.textPrimary),
-            ),
+            child: const Text('Cancel'),
           ),
           ElevatedButton(
             onPressed: () {
@@ -117,10 +101,7 @@ class ProfileView extends GetView<ProfileController> {
               controller.logout();
             },
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
-            child: const Text(
-              'Logout',
-              style: TextStyle(color: AppColors.background),
-            ),
+            child: const Text('Logout'),
           ),
         ],
       ),
@@ -150,19 +131,75 @@ class ProfileView extends GetView<ProfileController> {
           ),
         ),
         const SizedBox(width: 12),
-        _buildOutlinedButton(
-          onPressed: () =>
-              _showThemeMenu(context, Offset(Get.width - 100, 100)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Icon(Icons.color_lens_outlined, color: AppColors.primary),
-              SizedBox(width: 8),
-              Text(
-                'Theme',
-                style: TextStyle(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.bold,
+        SizedBox(
+          height: 50,
+          child: PopupMenuButton<ThemeMode>(
+            style: ButtonStyle(
+              side: WidgetStateProperty.all(
+                const BorderSide(color: AppColors.divider, width: 2),
+              ),
+              shape: WidgetStateProperty.all(
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+            ),
+            icon: Row(
+              children: [
+                const Icon(Icons.color_lens_outlined, color: AppColors.primary),
+                const SizedBox(width: 4),
+                Obx(() {
+                  final mode = ThemeController.to.themeMode.value;
+                  String text;
+                  switch (mode) {
+                    case ThemeMode.system:
+                      text = 'System';
+                      break;
+                    case ThemeMode.light:
+                      text = 'Light';
+                      break;
+                    case ThemeMode.dark:
+                      text = 'Dark';
+                      break;
+                  }
+                  return Text(
+                    text,
+                    style: const TextStyle(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  );
+                }),
+              ],
+            ),
+            onSelected: (mode) => ThemeController.to.setThemeMode(mode),
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: ThemeMode.system,
+                child: Row(
+                  children: const [
+                    Icon(Icons.settings, color: AppColors.primary),
+                    SizedBox(width: 8),
+                    Text('System'),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: ThemeMode.light,
+                child: Row(
+                  children: const [
+                    Icon(Icons.light_mode, color: AppColors.primary),
+                    SizedBox(width: 8),
+                    Text('Light'),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: ThemeMode.dark,
+                child: Row(
+                  children: const [
+                    Icon(Icons.dark_mode, color: AppColors.primary),
+                    SizedBox(width: 8),
+                    Text('Dark'),
+                  ],
                 ),
               ),
             ],
@@ -170,69 +207,6 @@ class ProfileView extends GetView<ProfileController> {
         ),
       ],
     );
-  }
-
-  Future<void> _showThemeMenu(BuildContext context, Offset offset) async {
-    final tc = ThemeController.to;
-    ThemeMode selected = tc.themeMode.value;
-
-    final result = await showMenu<ThemeMode>(
-      context: context,
-      position: RelativeRect.fill,
-      items: [
-        PopupMenuItem(
-          value: ThemeMode.system,
-          child: Row(
-            children: [
-              Icon(
-                Icons.settings,
-                color: selected == ThemeMode.system
-                    ? AppColors.primary
-                    : AppColors.textSecondary,
-              ),
-              const SizedBox(width: 8),
-              const Text('System'),
-            ],
-          ),
-        ),
-        PopupMenuItem(
-          value: ThemeMode.light,
-          child: Row(
-            children: [
-              Icon(
-                Icons.light_mode,
-                color: selected == ThemeMode.light
-                    ? AppColors.primary
-                    : AppColors.textSecondary,
-              ),
-              const SizedBox(width: 8),
-              const Text('Light'),
-            ],
-          ),
-        ),
-        PopupMenuItem(
-          value: ThemeMode.dark,
-          child: Row(
-            children: [
-              Icon(
-                Icons.dark_mode,
-                color: selected == ThemeMode.dark
-                    ? AppColors.primary
-                    : AppColors.textSecondary,
-              ),
-              const SizedBox(width: 8),
-              const Text('Dark'),
-            ],
-          ),
-        ),
-      ],
-      elevation: 8,
-      color: AppColors.surface,
-    );
-
-    if (result != null && result != selected) {
-      tc.setThemeMode(result);
-    }
   }
 
   Widget _buildTextField({
@@ -243,7 +217,7 @@ class ProfileView extends GetView<ProfileController> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: Theme.of(Get.context!).cardColor,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -256,7 +230,6 @@ class ProfileView extends GetView<ProfileController> {
       child: TextField(
         controller: controller,
         readOnly: readOnly,
-        style: const TextStyle(color: AppColors.textPrimary, fontSize: 16),
         decoration: InputDecoration(
           labelText: label,
           labelStyle: const TextStyle(color: AppColors.textSecondary),
@@ -265,7 +238,7 @@ class ProfileView extends GetView<ProfileController> {
           disabledBorder: _outlineInputBorder(),
           enabledBorder: _outlineInputBorder(),
           filled: true,
-          fillColor: AppColors.surface,
+          fillColor: Theme.of(Get.context!).cardColor,
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 16,
             vertical: 16,
@@ -323,7 +296,7 @@ class ProfileView extends GetView<ProfileController> {
       return Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: Theme.of(Get.context!).cardColor,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -343,20 +316,10 @@ class ProfileView extends GetView<ProfileController> {
             const SizedBox(height: 16),
             Text(
               user.fullName,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
-              ),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            Text(
-              user.email,
-              style: const TextStyle(
-                fontSize: 14,
-                color: AppColors.textSecondary,
-              ),
-            ),
+            Text(user.email, style: const TextStyle(fontSize: 14)),
             if (user.role != null) ...[
               const SizedBox(height: 8),
               Container(
@@ -370,11 +333,7 @@ class ProfileView extends GetView<ProfileController> {
                 ),
                 child: Text(
                   user.role!.toUpperCase(),
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primary,
-                  ),
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                 ),
               ),
             ],

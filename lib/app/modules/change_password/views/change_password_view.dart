@@ -10,19 +10,7 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: const Text(
-          'Change Password',
-          style: TextStyle(
-            color: AppColors.surface,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        backgroundColor: AppColors.primary,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.surface),
-      ),
+      appBar: AppBar(title: const Text('Change Password'), elevation: 0),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
@@ -44,25 +32,17 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
   Widget _buildHeader() {
     return Column(
       children: const [
-        Icon(
-          FontAwesomeIcons.lock,
-          size: 44,
-          color: AppColors.primary,
-        ),
+        Icon(FontAwesomeIcons.lock, size: 44, color: AppColors.primary),
         SizedBox(height: 12),
         Text(
           'Update your password',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: AppColors.textPrimary,
-          ),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),
         SizedBox(height: 6),
         Text(
           'Enter your current password and choose a new one.',
-          style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
+          style: TextStyle(fontSize: 14),
           textAlign: TextAlign.center,
         ),
       ],
@@ -73,7 +53,7 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: Theme.of(Get.context!).cardColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -88,50 +68,59 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Obx(() => _passwordField(
-                  controller: controller.currentPasswordController,
-                  label: 'Current Password',
-                  icon: FontAwesomeIcons.lockOpen,
-                  validator: controller.validateCurrent,
-                  obscure: controller.obscureCurrent.value,
-                  onToggle: () => controller.obscureCurrent.toggle(),
-                )),
+            Obx(
+              () => _passwordField(
+                controller: controller.currentPasswordController,
+                label: 'Current Password',
+                icon: FontAwesomeIcons.lockOpen,
+                validator: controller.validateCurrent,
+                obscure: controller.obscureCurrent.value,
+                onToggle: () => controller.obscureCurrent.toggle(),
+              ),
+            ),
             const SizedBox(height: 16),
-            Obx(() => _passwordField(
-                  controller: controller.newPasswordController,
-                  label: 'New Password',
-                  icon: FontAwesomeIcons.key,
-                  validator: controller.validateNew,
-                  obscure: controller.obscureNew.value,
-                  onToggle: () => controller.obscureNew.toggle(),
-                )),
+            Obx(
+              () => _passwordField(
+                controller: controller.newPasswordController,
+                label: 'New Password',
+                icon: FontAwesomeIcons.key,
+                validator: controller.validateNew,
+                obscure: controller.obscureNew.value,
+                onToggle: () => controller.obscureNew.toggle(),
+              ),
+            ),
             const SizedBox(height: 16),
-            Obx(() => _passwordField(
-                  controller: controller.confirmPasswordController,
-                  label: 'Confirm New Password',
-                  icon: FontAwesomeIcons.check,
-                  validator: controller.validateConfirm,
-                  obscure: controller.obscureConfirm.value,
-                  onToggle: () => controller.obscureConfirm.toggle(),
-                )),
+            Obx(
+              () => _passwordField(
+                controller: controller.confirmPasswordController,
+                label: 'Confirm New Password',
+                icon: FontAwesomeIcons.check,
+                validator: controller.validateConfirm,
+                obscure: controller.obscureConfirm.value,
+                onToggle: () => controller.obscureConfirm.toggle(),
+              ),
+            ),
             const SizedBox(height: 20),
-            Obx(() => _buildPrimaryButton(
-                  onPressed:
-                      controller.isLoading.value ? null : controller.changePassword,
-                  child: controller.isLoading.value
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Text(
-                          'Change Password',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
+            Obx(
+              () => _buildPrimaryButton(
+                onPressed: controller.isLoading.value
+                    ? null
+                    : controller.changePassword,
+                child: controller.isLoading.value
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Text(
+                        'Change Password',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
                         ),
-                )),
+                      ),
+              ),
+            ),
           ],
         ),
       ),
@@ -152,15 +141,16 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
       validator: validator,
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: const TextStyle(color: AppColors.textSecondary),
         prefixIcon: Icon(icon, size: 18, color: AppColors.primary),
         suffixIcon: IconButton(
-          icon: Icon(obscure ? Icons.visibility_off : Icons.visibility,
-              color: AppColors.textSecondary),
+          icon: Icon(
+            obscure ? Icons.visibility_off : Icons.visibility,
+            color: AppColors.textSecondary,
+          ),
           onPressed: onToggle,
         ),
         filled: true,
-        fillColor: AppColors.surface,
+        fillColor: Theme.of(Get.context!).cardColor,
         border: _border(),
         enabledBorder: _border(),
         focusedBorder: _focusedBorder(),
@@ -169,10 +159,7 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
           vertical: 16,
         ),
       ),
-      style: const TextStyle(
-        color: AppColors.textPrimary,
-        fontSize: 16,
-      ),
+      style: const TextStyle(fontSize: 16),
     );
   }
 

@@ -11,7 +11,6 @@ class LoginView extends GetView<LoginController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
@@ -40,17 +39,13 @@ class LoginView extends GetView<LoginController> {
         SizedBox(height: 12),
         Text(
           'Welcome Back',
-          style: TextStyle(
-            fontSize: 26,
-            fontWeight: FontWeight.bold,
-            color: AppColors.textPrimary,
-          ),
+          style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),
         SizedBox(height: 6),
         Text(
           'Sign in to manage your gym members',
-          style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
+          style: TextStyle(fontSize: 14),
           textAlign: TextAlign.center,
         ),
       ],
@@ -61,7 +56,7 @@ class LoginView extends GetView<LoginController> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: Theme.of(Get.context!).cardColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -101,7 +96,7 @@ class LoginView extends GetView<LoginController> {
           color: AppColors.primary,
         ),
         filled: true,
-        fillColor: AppColors.surface,
+        fillColor: Theme.of(Get.context!).cardColor,
         border: _border(),
         enabledBorder: _border(),
         focusedBorder: _focusedBorder(),
@@ -110,7 +105,7 @@ class LoginView extends GetView<LoginController> {
           vertical: 16,
         ),
       ),
-      style: const TextStyle(color: AppColors.textPrimary, fontSize: 16),
+      style: const TextStyle(fontSize: 16),
     );
   }
 
@@ -119,7 +114,6 @@ class LoginView extends GetView<LoginController> {
       return TextFormField(
         controller: controller.passwordController,
         obscureText: !controller.isPasswordVisible.value,
-        validator: controller.validatePassword,
         decoration: InputDecoration(
           labelText: 'Password',
           labelStyle: const TextStyle(color: AppColors.textSecondary),
@@ -139,7 +133,7 @@ class LoginView extends GetView<LoginController> {
             ),
           ),
           filled: true,
-          fillColor: AppColors.surface,
+          fillColor: Theme.of(Get.context!).cardColor,
           border: _border(),
           enabledBorder: _border(),
           focusedBorder: _focusedBorder(),
@@ -148,7 +142,8 @@ class LoginView extends GetView<LoginController> {
             vertical: 16,
           ),
         ),
-        style: const TextStyle(color: AppColors.textPrimary, fontSize: 16),
+        validator: controller.validatePassword,
+        style: const TextStyle(fontSize: 16),
       );
     });
   }

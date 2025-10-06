@@ -10,18 +10,12 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text(
           'Reset Password',
-          style: TextStyle(
-            color: AppColors.surface,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: AppColors.primary,
         elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.surface),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -52,17 +46,13 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
         SizedBox(height: 12),
         Text(
           'Forgot your password?',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: AppColors.textPrimary,
-          ),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),
         SizedBox(height: 6),
         Text(
           'Enter your email and we will send you a reset link.',
-          style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
+          style: TextStyle(fontSize: 14),
           textAlign: TextAlign.center,
         ),
       ],
@@ -73,7 +63,7 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: Theme.of(Get.context!).cardColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -101,7 +91,7 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
                   color: AppColors.primary,
                 ),
                 filled: true,
-                fillColor: AppColors.surface,
+                fillColor: Theme.of(Get.context!).cardColor,
                 border: _border(),
                 enabledBorder: _border(),
                 focusedBorder: _focusedBorder(),
@@ -110,10 +100,7 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
                   vertical: 16,
                 ),
               ),
-              style: const TextStyle(
-                color: AppColors.textPrimary,
-                fontSize: 16,
-              ),
+              style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
             Obx(() => _buildSendButton()),
