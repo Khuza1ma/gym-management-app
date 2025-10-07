@@ -1,6 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gym_management_app/app/data/models/member_model.dart';
 
+/// Represents a single page of paginated member results.
+/// [lastDocument] should be passed as [startAfter] for the next page.
+/// [hasMore] indicates whether more pages may be available.
+class PaginatedMembers {
+  final List<Member> members;
+  final DocumentSnapshot? lastDocument;
+  final bool hasMore;
+
+  PaginatedMembers({
+    required this.members,
+    required this.lastDocument,
+    required this.hasMore,
+  });
+}
+
 class MemberService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final String _collection = 'members';
@@ -45,6 +60,39 @@ class MemberService {
           .toList();
     } catch (e) {
       throw Exception('Failed to get members: $e');
+    }
+  }
+
+  /// Paginated fetch for all members ordered by `cardNumber` ascending.
+  Future<PaginatedMembers> getAllMembersPaginated({
+    int limit = 20,
+    DocumentSnapshot? startAfter,
+  }) async {
+    try {
+      Query query = _firestore
+          .collection(_collection)
+          .orderBy('cardNumber', descending: false)
+          .limit(limit);
+
+      if (startAfter != null) {
+        query = (query as Query<Map<String, dynamic>>)
+            .startAfterDocument(startAfter);
+      }
+
+      final querySnapshot = await query.get();
+      final docs = querySnapshot.docs;
+      final members = docs.map((doc) => Member.fromFirestore(doc)).toList();
+
+      final lastDoc = docs.isNotEmpty ? docs.last : null;
+      final hasMore = docs.length >= limit;
+
+      return PaginatedMembers(
+        members: members,
+        lastDocument: lastDoc,
+        hasMore: hasMore,
+      );
+    } catch (e) {
+      throw Exception('Failed to get members (paginated): $e');
     }
   }
 

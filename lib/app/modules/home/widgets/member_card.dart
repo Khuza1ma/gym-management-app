@@ -29,19 +29,8 @@ class MemberCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: onTap,
-      child: Container(
+      child: Card(
         margin: const EdgeInsets.only(bottom: 12),
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.shadow,
-              blurRadius: 6,
-              offset: const Offset(0, 1),
-            ),
-          ],
-        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -185,7 +174,9 @@ class MemberCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Text(
-                            'Expired ${-daysUntilExpiry} day${-daysUntilExpiry == 1 ? '' : 's'} ago',
+                            daysUntilExpiry == 0
+                                ? 'Expires today'
+                                : 'Expired ${-daysUntilExpiry} day${-daysUntilExpiry == 1 ? '' : 's'} ago',
                             style: TextStyle(
                               fontSize: 11,
                               color: Colors.red.shade700,

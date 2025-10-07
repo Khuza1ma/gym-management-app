@@ -18,7 +18,7 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: Get.height * 0.1),
+              SizedBox(height: Get.height * 0.15),
               _buildHeader(),
               const SizedBox(height: 24),
               _buildFormCard(),

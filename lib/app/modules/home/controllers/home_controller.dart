@@ -1,5 +1,6 @@
 import 'package:gym_management_app/app/data/models/member_model.dart';
 import '../../../data/services/member_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,6 +17,12 @@ class HomeController extends GetxController
   final RxBool isLoadingAllMembers = false.obs;
   final RxBool isLoadingExpiringMembers = false.obs;
   final RxBool isLoadingExpiredMembers = false.obs;
+
+  // Pagination state for All Members tab
+  static const int pageSize = 20;
+  final RxBool isLoadingMoreAll = false.obs;
+  final RxBool hasMoreAll = true.obs;
+  DocumentSnapshot? _lastAllDoc;
 
   final RxInt currentTabIndex = 0.obs;
   final RxString searchQuery = ''.obs;
@@ -49,9 +56,17 @@ class HomeController extends GetxController
 
   Future<void> loadAllMembers() async {
     try {
+      // Reset pagination
+      _lastAllDoc = null;
+      hasMoreAll.value = true;
       isLoadingAllMembers.value = true;
-      final members = await _memberService.getAllMembers();
-      allMembers.assignAll(members);
+
+      final result = await _memberService.getAllMembersPaginated(
+        limit: pageSize,
+      );
+      allMembers.assignAll(result.members);
+      _lastAllDoc = result.lastDocument;
+      hasMoreAll.value = result.hasMore;
     } catch (e) {
       Get.snackbar(
         'Error',
@@ -60,6 +75,32 @@ class HomeController extends GetxController
       );
     } finally {
       isLoadingAllMembers.value = false;
+    }
+  }
+
+  Future<void> loadNextAllMembersPage() async {
+    // Do not paginate while searching or when not on All Members tab
+    if (currentTabIndex.value != 0) return;
+    if (searchQuery.value.trim().isNotEmpty) return;
+    if (isLoadingMoreAll.value || !hasMoreAll.value) return;
+
+    try {
+      isLoadingMoreAll.value = true;
+      final result = await _memberService.getAllMembersPaginated(
+        limit: pageSize,
+        startAfter: _lastAllDoc,
+      );
+      allMembers.addAll(result.members);
+      _lastAllDoc = result.lastDocument;
+      hasMoreAll.value = result.hasMore;
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to load more members: $e',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
+      isLoadingMoreAll.value = false;
     }
   }
 
@@ -195,8 +236,15 @@ class HomeController extends GetxController
     }
     try {
       isLoadingAllMembers.value = true;
-      final results = await _memberService.searchMembers(query: q);
+      // When searching, ignore pagination; display up to pageSize results.
+      final results = await _memberService.searchMembers(
+        query: q,
+        limit: pageSize,
+      );
       allMembers.assignAll(results);
+      // Disable further pagination while search is active
+      hasMoreAll.value = false;
+      _lastAllDoc = null;
     } catch (e) {
       Get.snackbar(
         'Error',

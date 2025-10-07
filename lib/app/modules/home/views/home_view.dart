@@ -24,6 +24,7 @@ class HomeView extends GetView<HomeController> {
           controller: controller.tabController,
           indicatorColor: AppColors.surface,
           indicatorWeight: 3,
+          dividerHeight: 0,
           labelColor: AppColors.surface,
           unselectedLabelColor: AppColors.surface.withValues(alpha: 0.7),
           labelStyle: const TextStyle(
@@ -128,16 +129,41 @@ class HomeView extends GetView<HomeController> {
                 : RefreshIndicator(
                     onRefresh: controller.refreshData,
                     color: AppColors.primary,
-                    child: ListView.builder(
-                      padding: const EdgeInsets.all(16),
-                      itemCount: controller.allMembers.length,
-                      itemBuilder: (context, index) {
-                        final member = controller.allMembers[index];
-                        return MemberCard(
-                          member: member,
-                          onTap: () => _editMember(member),
-                        );
+                    child: NotificationListener<ScrollNotification>(
+                      onNotification: (notification) {
+                        if (notification.metrics.pixels >=
+                            notification.metrics.maxScrollExtent - 200) {
+                          controller.loadNextAllMembersPage();
+                        }
+                        return false;
                       },
+                      child: Obx(() {
+                        final total = controller.allMembers.length;
+                        final showFooter = controller.isLoadingMoreAll.value;
+                        final itemCount = total + (showFooter ? 1 : 0);
+
+                        return ListView.builder(
+                          padding: const EdgeInsets.all(16),
+                          itemCount: itemCount,
+                          itemBuilder: (context, index) {
+                            if (showFooter && index == itemCount - 1) {
+                              return const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 16),
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    color: AppColors.primary,
+                                  ),
+                                ),
+                              );
+                            }
+                            final member = controller.allMembers[index];
+                            return MemberCard(
+                              member: member,
+                              onTap: () => _editMember(member),
+                            );
+                          },
+                        );
+                      }),
                     ),
                   ),
           ),

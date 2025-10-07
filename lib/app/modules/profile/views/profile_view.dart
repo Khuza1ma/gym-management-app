@@ -215,18 +215,7 @@ class ProfileView extends GetView<ProfileController> {
     required IconData icon,
     bool readOnly = false,
   }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(Get.context!).cardColor,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.shadow,
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
+    return Card(
       child: TextField(
         controller: controller,
         readOnly: readOnly,
@@ -293,51 +282,45 @@ class ProfileView extends GetView<ProfileController> {
       final user = controller.currentUser.value;
       if (user == null) return const SizedBox.shrink();
 
-      return Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Theme.of(Get.context!).cardColor,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.shadow,
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            CircleAvatar(
-              radius: 40,
-              backgroundColor: AppColors.primary.withValues(alpha: 0.1),
-              child: Icon(Icons.person, size: 40, color: AppColors.primary),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              user.fullName,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            Text(user.email, style: const TextStyle(fontSize: 14)),
-            if (user.role != null) ...[
-              const SizedBox(height: 8),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 4,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  user.role!.toUpperCase(),
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+      return Card(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: [
+              CircleAvatar(
+                radius: 40,
+                backgroundColor: AppColors.primary.withValues(alpha: 0.1),
+                child: Icon(Icons.person, size: 40, color: AppColors.primary),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                user.fullName,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
+              const SizedBox(height: 8),
+              Text(user.email, style: const TextStyle(fontSize: 14)),
+              if (user.role != null) ...[
+                const SizedBox(height: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    user.role!.toUpperCase(),
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       );
     });
