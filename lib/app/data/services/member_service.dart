@@ -75,8 +75,9 @@ class MemberService {
           .limit(limit);
 
       if (startAfter != null) {
-        query = (query as Query<Map<String, dynamic>>)
-            .startAfterDocument(startAfter);
+        query = (query as Query<Map<String, dynamic>>).startAfterDocument(
+          startAfter,
+        );
       }
 
       final querySnapshot = await query.get();
@@ -203,6 +204,15 @@ class MemberService {
         lastNameQuery = lastNameQuery.startAfterDocument(startAfter);
       }
 
+      final intQuery = int.tryParse(trimmed);
+      QuerySnapshot? cardNumberSnapshot;
+      if (intQuery != null) {
+        final cardQuery = _firestore
+            .collection(_collection)
+            .where('cardNumber', isEqualTo: intQuery);
+        cardNumberSnapshot = await cardQuery.get();
+      }
+
       final results = await Future.wait([nameQuery.get(), lastNameQuery.get()]);
 
       final Map<String, Member> idToMember = {};
@@ -211,9 +221,19 @@ class MemberService {
           idToMember[doc.id] = Member.fromFirestore(doc);
         }
       }
+      if (cardNumberSnapshot != null) {
+        for (final doc in cardNumberSnapshot.docs) {
+          idToMember[doc.id] = Member.fromFirestore(doc);
+        }
+      }
 
-      final members = idToMember.values.toList();
+      var members = idToMember.values.toList();
       members.sort((a, b) => a.cardNumber.compareTo(b.cardNumber));
+
+      if (limit != null && members.length > limit) {
+        members = members.sublist(0, limit);
+      }
+
       return members;
     } catch (e) {
       throw Exception('Failed to search members: $e');

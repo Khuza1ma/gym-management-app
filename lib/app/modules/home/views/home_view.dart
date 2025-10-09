@@ -304,7 +304,7 @@ class HomeView extends GetView<HomeController> {
         onChanged: controller.setSearchQuery,
         textInputAction: TextInputAction.search,
         decoration: InputDecoration(
-          hintText: 'Search by name or last name',
+          hintText: 'Search by name or last name or card number',
           hintStyle: const TextStyle(
             color: AppColors.textSecondary,
             fontSize: 14,
